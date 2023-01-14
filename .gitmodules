@@ -1,0 +1,3 @@
+[submodule "xSHELL"]
+	path = xSHELL
+	url = git@github.com:fbnmtz/xSHELL.git
