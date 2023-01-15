@@ -6,10 +6,10 @@
 # Created: Monday, 2022/11/21 - 20:55:29
 # Author.: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Last Modified: Sunday, 2023/01/15 - 03:12:43
+# Last Modified: Sunday, 2023/01/15 - 15:45:51
 # Modified By..: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Version: 0.0.4.129
+# Version: 0.0.5.127
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
 # Description: 
 #  >
@@ -17,14 +17,9 @@
 # HISTORY:
 #
 
+# shellcheck disable=1090,2154
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~    
-# shellcheck=SC1091
-
-# ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~    
-[ -f $PWD/xSHELL/initialize ] && source $PWD/xSHELL/initialize
-[ -f ~/bin/lib/init ] && source ~/bin/lib/init
-# source ~/bin/lib/init
-
+source ~/bin/xSHELL/init
  
 use args utils torctl.lib 
 
