@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+#
+# ############################################################################
+# Project: torctl (none)
+# File...: install
+# Created: Sunday, 2023/01/15 - 15:36:09
+# Author.: @fbnmtz, (fabiano.matoz@gmail.com)
+# ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
+# Last Modified: Sunday, 2023/01/15 - 15:50:02
+# Modified By..: @fbnmtz, (fabiano.matoz@gmail.com)
+# ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
+# Version: 0.0.1.11
+# ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
+# Description: 
+#  >
+# ############################################################################
+# HISTORY:
+#
+
+github=https://github.com
+username=fbnmtz
+repo=torctl
+
+if [ ! -d ~/bin/xSHELL ] || [ ! -L ~/bin/xSHELL ]; then
+    curl -sSL https://raw.githubusercontent.com/fbnmtz/shell/master/install | bash 
+fi
+
+if [ ! -d ~/bin/xSHELL/packages ] || [ ! -L ~/bin/xSHELL/packages ]; then
+
+    # clone this repo to your '/home'
+    git clone "${github}/${username}/${repo}" ~/bin/xSHELL/packages/${repo} && \
+    
+    # Add scripts to your system $PATH
+    if ! grep "\$PATH:\$HOME/bin/xSHELL/packages/${repo}" ~/.profile  1> /dev/null  ; then
+        echo -e "\nexport PATH=\"\$PATH:\$HOME/bin/xSHELL/packages/${repo}\"" >> ~/.profile
+    fi 
+fi
