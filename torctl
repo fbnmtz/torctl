@@ -6,10 +6,10 @@
 # Created: Monday, 2022/11/21 - 20:55:29
 # Author.: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Last Modified: Saturday, 2023/01/14 - 20:47:16
+# Last Modified: Sunday, 2023/01/15 - 03:12:43
 # Modified By..: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Version: 0.0.4.114
+# Version: 0.0.4.129
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
 # Description: 
 #  >
@@ -18,9 +18,15 @@
 #
 
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~    
-source ./xSHELL/initialize
+# shellcheck=SC1091
+
+# ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~    
+[ -f $PWD/xSHELL/initialize ] && source $PWD/xSHELL/initialize
+[ -f ~/bin/lib/init ] && source ~/bin/lib/init
+# source ~/bin/lib/init
+
  
-use args torctl.lib 
+use args utils torctl.lib 
 
 # check requirements for this app
 xrequirements docker curl jq grep iptables

@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 #
 # ############################################################################
-# Project: shell (none)
+# Project: torctl (none)
 # File...: torctl.lib
 # Created: Tuesday, 2022/11/29 - 20:46:56
 # Author.: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Last Modified: Tuesday, 2023/01/10 - 01:10:45
+# Last Modified: Sunday, 2023/01/15 - 03:25:01
 # Modified By..: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Version: 0.0.2.282
+# Version: 0.0.2.328
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
 # Description: 
 #  >
@@ -20,8 +20,11 @@
 
 __LIB_TORCTL_LIB=true
 
-APP_HOME='~/.fbnmtz/torctl'
-mkdir -p $APP_HOME
+# define app directory
+APP_DIR="$(dirname $0)"
+
+# if executing outher $PATH system (./torctl), redifine APP_DIR
+[ "$APP_DIR" == "." ] && cd $PWD && APP_DIR=$PWD
 
 # get current IP Address
 current_ip(){    
@@ -39,8 +42,8 @@ start_tor_server(){
      docker run --rm \
         -d \
         --net host \
-        -v $APP_DIR/torctl.rc:/etc/tor/torrc \
-        -v $APP_DIR/torctl.resolv.conf:/etc/resolv.conf \
+        -v "$APP_DIR"/torctl.rc:/etc/tor/torrc \
+        -v "$APP_DIR"/torctl.resolv.conf:/etc/resolv.conf \
         --entrypoint "" \
         --name torctl_server \
         m88v2/tor-server:latest \

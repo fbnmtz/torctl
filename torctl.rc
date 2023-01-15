@@ -1,14 +1,15 @@
+#!/usr/bin/env bash
 #
 # #############################################################################
-# Project: bin (none)
+# Project: torctl (none)
 # File...: torctl.rc
 # Created: Saturday, 2022/12/17 - 21:39:37                                    #
 # Author.: @fbnmtz, (fabiano.matoz@gmail.com)                                 #
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~#
-# Last Modified: Thursday, 2022/12/29 - 23:18:12
+# Last Modified: Sunday, 2023/01/15 - 02:20:01
 # Modified By..: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~#
-# Version: 0.0.2.27
+# Version: 0.0.3.30
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~#
 # Description:                                                                #
 #  >                                                                          #
