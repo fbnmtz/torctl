@@ -2,8 +2,26 @@
 
 Simple scritp to setup a tor-server via docker and route all traffic of your system to it.
 
+## requirements:
+
+* docker
+* curl
+* jq
+* grep
+* [xSHELL](https://github.com/fbnmtz/xSHELL)
+
+## Install:
+
+use this script to install torctl on your machine
+
+```bash
+curl -sSL https://raw.githubusercontent.com/fbnmtz/torctl/master/install | bash
 ```
-torctl --help                                                                      
+
+## Usage:
+
+```
+torctl --help                                                                    
 
 usage:
   torctl [-s] [-t] [-S] [-r] [-h] [-v]
@@ -20,7 +38,6 @@ v0.0.2-rc91 - writen by @fbnmtz 2022
 
 ```
 
-```
-# requirements for this app
-docker curl jq grep iptables
-```
+## TODO:
+
+* [ ] Port firewall rules to MacOs
