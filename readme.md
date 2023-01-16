@@ -1,10 +1,25 @@
+<p align="center">
+    <a href="https://github.com/fbnmtz/torctl/issues"><img src="https://img.shields.io/github/issues/fbnmtz/torctl.svg"></a>
+    <a href="https://img.shields.io/github/forks/fbnmtz/torctl.svg"><img src="https://img.shields.io/github/forks/fbnmtz/torctl.svg"></a>
+    <a href="https://github.com/fbnmtz/torctl/stargazers"><img src="https://img.shields.io/github/stars/fbnmtz/torctl.svg"></a>
+    <a href="https://github.com/fbnmtz/torctl/releases"><img src="https://img.shields.io/github/downloads/fbnmtz/torctl/total.svg"></a>
+    <a href="https://repology.org/metapackage/torctl/versions"><img src="https://repology.org/badge/tiny-repos/torctl.svg"></a>
+    <a href="https://github.com/fbnmtz/torctl/graphs/contributors">
+      <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/fbnmtz/torctl" />
+    </a>
+</p>
+
+<p align="center">
+    <img width="250px" src="./docs/logo-torctl.png" align="center" />
+</p>
+
 # torctl
 
 Simple scritp to setup a tor-server via docker and route all traffic of your system to it.
 
 ## requirements:
 
-* docker
+* [docker](https://docs.docker.com/engine/install/ubuntu/)
 * curl
 * jq
 * grep
