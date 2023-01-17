@@ -13,17 +13,15 @@
     <img width="250px" src="./docs/logo-torctl.png" align="center" />
 </p>
 
+**powered by [xSHELL](https://github.com/fbnmtz/xSHELL) library system**
+
 # torctl
 
 Simple scritp to setup a tor-server via docker and route all traffic of your system to it.
 
 ## requirements:
 
-* [docker](https://docs.docker.com/engine/install/ubuntu/)
-* curl
-* jq
-* grep
-* [xSHELL](https://github.com/fbnmtz/xSHELL)
+* [docker](https://docs.docker.com/engine/install/ubuntu/), curl, jq, grep
 
 ## Install:
 
