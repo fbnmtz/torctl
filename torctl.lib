@@ -6,10 +6,10 @@
 # Created: Tuesday, 2022/11/29 - 20:46:56
 # Author.: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Last Modified: Sunday, 2023/01/15 - 03:25:01
+# Last Modified: Tuesday, 2023/01/17 - 01:55:39
 # Modified By..: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Version: 0.0.2.328
+# Version: 0.0.2.346
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
 # Description: 
 #  >
@@ -18,12 +18,12 @@
 #
 #!/usr/bin/bash
 
-__LIB_TORCTL_LIB=true
+_xLIB_TORCTL_=true
 
 # define app directory
 APP_DIR="$(dirname $0)"
 
-# if executing outher $PATH system (./torctl), redifine APP_DIR
+# if executing out of $PATH system (./torctl), redifine APP_DIR
 [ "$APP_DIR" == "." ] && cd $PWD && APP_DIR=$PWD
 
 # get current IP Address
@@ -52,60 +52,19 @@ start_tor_server(){
 
 # setup firewall rules to host use 'tor_server'
 configure_firewall(){
-
-    # show current FW config 
-    # iptables -L -nv --line-number | more
+    case "$(sys.os)" in
+        Linux ) source ./config/fw-up-linux.sh  ; fwLinuxUp  ;;
+        Darwin) source ./config/fw-up-darwin.sh ; fwDarwinUp ;;
+    esac
     
-    # save a backup
-    iptables-save > $APP_HOME/iptables.rules.bkp
-
-    ### set vars
-    _tor_uid=$(docker exec -u tor torctl_server id -u)
-    _non_tor="192.168.0.0/24 192.168.1.0/24 192.168.2.0/24"
-    _trans_port="9040"
-    _dns_port="5353"
-
-    ### set iptables *nat
-    iptables -t nat -A OUTPUT -m owner --uid-owner $_tor_uid -j RETURN
-    iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports $_dns_port
-
-    # allow clearnet access for hosts in $_non_tor
-    for _clearnet in $_non_tor 127.0.0.0/9 127.128.0.0/10; do
-        iptables -t nat -A OUTPUT -d $_clearnet -j RETURN
-    done
-
-    # redirect all other output to Tor's TransPort
-    iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $_trans_port
-    # iptables -t nat -A OUTPUT -p upd --syn -j REDIRECT --to-ports $_trans_port
-
-    ### set iptables *filter
-    iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-
-    # allow clearnet access for hosts in $_non_tor
-    for _clearnet in $_non_tor 127.0.0.0/8; do
-        iptables -A OUTPUT -d $_clearnet -j ACCEPT
-    done
-
-    # allow only Tor output
-    iptables -A OUTPUT -m owner --uid-owner $_tor_uid -j ACCEPT
-    iptables -A OUTPUT -j REJECT
 }
 
 # restore default rules or setup a clear firewall
 restore_firewall(){
-
-    if [ -f $APP_HOME/iptables.rules.bkp ]; then
-        iptables-restore $APP_HOME/iptables.rules.bkp
-    else
-        # clear all FW rules
-        iptables -P INPUT ACCEPT
-        iptables -P FORWARD ACCEPT
-        iptables -P OUTPUT ACCEPT
-        iptables -t nat -F
-        iptables -t mangle -F
-        iptables -F
-        iptables -X
-    fi
+     case "$(sys.os)" in
+        Linux ) source ./config/fw-down-linux.sh  ; fwLinuxDown  ;;
+        Darwin) source ./config/fw-down-darwin.sh ; fwDarwinDown ;;
+    esac
 }
 
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~    
