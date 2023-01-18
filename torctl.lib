@@ -6,10 +6,10 @@
 # Created: Tuesday, 2022/11/29 - 20:46:56
 # Author.: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Last Modified: Tuesday, 2023/01/17 - 01:55:39
+# Last Modified: Wednesday, 2023/01/18 - 01:14:01
 # Modified By..: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Version: 0.0.2.346
+# Version: 0.0.3.435
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
 # Description: 
 #  >
@@ -25,6 +25,21 @@ APP_DIR="$(dirname $0)"
 
 # if executing out of $PATH system (./torctl), redifine APP_DIR
 [ "$APP_DIR" == "." ] && cd $PWD && APP_DIR=$PWD
+
+# function to load FW rules
+load_fw_rules(){
+
+    case "$(xsys.os)" in
+        Linux ) 
+            source "$APP_DIR/config/fw-up-linux.sh"  
+            source "$APP_DIR/config/fw-down-linux.sh"  
+        ;;
+        Darwin) 
+            source "$APP_DIR/config/fw-up-darwin.sh" 
+            source "$APP_DIR/config/fw-down-darwin.sh" 
+        ;;
+    esac
+}
 
 # get current IP Address
 current_ip(){    
@@ -52,18 +67,28 @@ start_tor_server(){
 
 # setup firewall rules to host use 'tor_server'
 configure_firewall(){
-    case "$(sys.os)" in
-        Linux ) source ./config/fw-up-linux.sh  ; fwLinuxUp  ;;
-        Darwin) source ./config/fw-up-darwin.sh ; fwDarwinUp ;;
+    
+    # load rules based on the current OS
+    load_fw_rules
+    
+    # test current OS and apply rules
+    case "$(xsys.os)" in
+        Linux ) fwLinuxUp  ;;
+        Darwin) fwDarwinUp ;;
     esac
     
 }
 
 # restore default rules or setup a clear firewall
 restore_firewall(){
-     case "$(sys.os)" in
-        Linux ) source ./config/fw-down-linux.sh  ; fwLinuxDown  ;;
-        Darwin) source ./config/fw-down-darwin.sh ; fwDarwinDown ;;
+
+    # load rules based on the current OS
+    load_fw_rules
+     
+    # test current OS and apply rules
+    case "$(xsys.os)" in
+        Linux ) fwLinuxDown  ;;
+        Darwin) fwDarwinDown ;;
     esac
 }
 
@@ -75,15 +100,28 @@ actionStart(){
     # require ROOT to run
     requireROOT
     
-    echo "-> Starting Tor Server"
+    local title="-> Starting Tor Server"
+    local msg=""
+    echo "$title"
     if start_tor_server; then
         echo "-> setting up iptables rules"
         configure_firewall
         echo '-> Fetching current IP...'
         sleep 2
-        echo "-> CURRENT IP: $(current_ip)" 
+        tor_ip="$(current_ip)"
+        echo "-> CURRENT IP: $tor_ip" 
+        
+        # set variables for notification
+        title="torctl started"
+        msg="this is your current IP ($tor_ip)"
+
+        # call system function for notification
+        xsys.notify "$title" "$msg"
     else
-        echo "-> fail to start server... (check your docker service)"
+        msg="(check your docker service)"
+        title="-> fail to start server..."
+        echo "$title $msg" 
+        xsys.notify "torctl started" "$msg"
         exit 2
     fi
 }
@@ -91,24 +129,45 @@ actionStart(){
 actionStop(){
     # require ROOT to run
     requireROOT
+
+    local title="-> Stopping Tor Server"
+    local msg=""
+    echo "$title"
     
-    echo "-> Stopping Tor Server"
+    echo "$title"
     docker stop torctl_server &> /dev/null
     echo "-> clear firewall rules"
     restore_firewall
-    echo "-> CURRENT IP: $(current_ip)" 
+
+    tor_ip="$(current_ip)"
+    
+    echo "-> CURRENT IP: $tor_ip" 
+    
+    title="torctl stoped"
+    msg="using again your provider IP ($tor_ip)"
+    # sys.notify "torctl stoped" "using again yout provider IP $tor_ip"
+    xsys.notify "$title" "$msg"
 }
 
 actionStatus(){
+    local title="torctl status"
+    local msg=''
     # check if TorServer is running via docker
     if docker ps | grep torctl &> /dev/null; then
-        echo "-> Tor Server is running..."
+        msg="-> Tor Server is RUNNING..."
     else 
-        echo "-> Tor Server is NOT RUNNING"
+        msg="-> Tor Server is NOT RUNNING"
     fi
-    echo "-> CURRENT IP: $(current_ip)..."
+    echo "$msg"
+
+    tor_ip="$(current_ip)"
+    msg+=" (IP: $tor_ip)"
+
+    echo "-> CURRENT IP: ${tor_ip}..."
     echo "-> Details:"
-    ip_geo_information | jq 
+    # sys.notify "torctl status" "$msg - IP: $(current_ip)"
+    xsys.notify "${title}"  "$(echo ${msg/->/})"
+    # ip_geo_information | jq 
 }
 
 actionRestart(){
