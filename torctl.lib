@@ -6,10 +6,10 @@
 # Created: Tuesday, 2022/11/29 - 20:46:56
 # Author.: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Last Modified: Wednesday, 2023/01/18 - 01:14:01
+# Last Modified: Thursday, 2023/01/19 - 18:54:40
 # Modified By..: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Version: 0.0.3.435
+# Version: 0.0.3.441
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
 # Description: 
 #  >
@@ -21,10 +21,10 @@
 _xLIB_TORCTL_=true
 
 # define app directory
-APP_DIR="$(dirname $0)"
+APP_DIR=$(dirname "$0")
 
 # if executing out of $PATH system (./torctl), redifine APP_DIR
-[ "$APP_DIR" == "." ] && cd $PWD && APP_DIR=$PWD
+[ "$APP_DIR" == "." ] && cd "$PWD" && APP_DIR=$PWD
 
 # function to load FW rules
 load_fw_rules(){
@@ -43,12 +43,12 @@ load_fw_rules(){
 
 # get current IP Address
 current_ip(){    
-   echo $(curl --silent ifconfig.me)
+   curl --silent ifconfig.me
 }
 
 # get geo information of current ip address
 ip_geo_information(){
-   echo $(curl --silent  http://ip-api.com/json/$(current_ip))
+   curl --silent  http://ip-api.com/json/"$(current_ip)"
 }
 
 # function to start TOR SERVER
