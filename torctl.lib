@@ -6,17 +6,16 @@
 # Created: Tuesday, 2022/11/29 - 20:46:56
 # Author.: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Last Modified: Thursday, 2023/01/19 - 18:54:40
+# Last Modified: Saturday, 2025/08/02 - 09:23:56
 # Modified By..: @fbnmtz, (fabiano.matoz@gmail.com)
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
-# Version: 0.0.3.441
+# Version: 0.0.4.451
 # ~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~·~·~·~·~·~·~·~~·~·~·~·~·~~·~·~·~·~·~·~·~
 # Description: 
 #  >
 # ############################################################################
 # HISTORY:
 #
-#!/usr/bin/bash
 
 _xLIB_TORCTL_=true
 
@@ -27,7 +26,7 @@ APP_DIR=$(dirname "$0")
 [ "$APP_DIR" == "." ] && cd "$PWD" && APP_DIR=$PWD
 
 # function to load FW rules
-load_fw_rules(){
+firewall_load_rules(){
 
     case "$(xsys.os)" in
         Linux ) 
@@ -54,9 +53,7 @@ ip_geo_information(){
 # function to start TOR SERVER
 start_tor_server(){
     # start tor server with docker
-     docker run --rm \
-        -d \
-        --net host \
+     docker run --rm -d --net host \
         -v "$APP_DIR"/torctl.rc:/etc/tor/torrc \
         -v "$APP_DIR"/torctl.resolv.conf:/etc/resolv.conf \
         --entrypoint "" \
@@ -66,10 +63,10 @@ start_tor_server(){
 }
 
 # setup firewall rules to host use 'tor_server'
-configure_firewall(){
+firewall_up(){
     
     # load rules based on the current OS
-    load_fw_rules
+    firewall_load_rules
     
     # test current OS and apply rules
     case "$(xsys.os)" in
@@ -80,10 +77,10 @@ configure_firewall(){
 }
 
 # restore default rules or setup a clear firewall
-restore_firewall(){
+firewall_down(){
 
     # load rules based on the current OS
-    load_fw_rules
+    firewall_load_rules
      
     # test current OS and apply rules
     case "$(xsys.os)" in
@@ -105,7 +102,7 @@ actionStart(){
     echo "$title"
     if start_tor_server; then
         echo "-> setting up iptables rules"
-        configure_firewall
+        firewall_up
         echo '-> Fetching current IP...'
         sleep 2
         tor_ip="$(current_ip)"
@@ -137,7 +134,7 @@ actionStop(){
     echo "$title"
     docker stop torctl_server &> /dev/null
     echo "-> clear firewall rules"
-    restore_firewall
+    firewall_down
 
     tor_ip="$(current_ip)"
     
@@ -164,10 +161,10 @@ actionStatus(){
     msg+=" (IP: $tor_ip)"
 
     echo "-> CURRENT IP: ${tor_ip}..."
-    echo "-> Details:"
+    echo "-> Details: (IP Geo Information)"
     # sys.notify "torctl status" "$msg - IP: $(current_ip)"
     xsys.notify "${title}"  "$(echo ${msg/->/})"
-    # ip_geo_information | jq 
+    ip_geo_information | jq 
 }
 
 actionRestart(){

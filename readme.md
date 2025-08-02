@@ -20,7 +20,7 @@
 
 # torctl
 
-Simple scritp to setup a tor-server via docker and route all traffic of your system to it.
+Simple script to setup a tor-server via docker and route all traffic of your system to it.
 
 ## requirements:
 
@@ -37,23 +37,26 @@ curl -sSL https://raw.githubusercontent.com/fbnmtz/torctl/master/install | bash
 ## Usage:
 
 ```
-torctl --help                                                                    
+torctl -h                                                                                                                                                                             
 
-usage:
-  torctl [-s] [-t] [-S] [-r] [-h] [-v]
+Simple script to setup a tor-server via docker and route all traffic of your system to it.
 
--> Available Options:
-   -s,  --start         start Tor Server and redirect traffic throug it
-   -t,  --stop          stop Tor Server and restore firewall rules
-   -S,  --status        show current status
-   -r,  --restart       restart Tor Server
-   -h,  --help          show this help
-   -v,  --version       print version and exit
+usage: 
+  torctl [-s] [-t] [-S] [-r] [-h] [-v] 
 
-v0.0.2-rc91 - writen by @fbnmtz 2022
+     -s,--start     start Tor Server and redirect traffic throug it
+     -t,--stop      stop Tor Server and restore firewall rules
+     -S,--status    show current status
+     -r,--restart   restart Tor Server
+     -h,--help      show this help
+     -v,--version   print version and exit
+
+Warning! You must be root to change firewall rules and start the tor server.
+
+v0.1.0-rc145 on 20250802 - writen by @fbnmtz
 
 ```
 
 ## TODO:
 
-* [ ] Port firewall rules to MacOs
+* [X] Port firewall rules to MacOs
